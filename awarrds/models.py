@@ -7,8 +7,6 @@ from tinymce.models import HTMLField
 from cloudinary.models import CloudinaryField
 
 # Create your models here.
-
-
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     image = CloudinaryField('image')
@@ -24,4 +22,27 @@ class Profile(models.Model):
     @receiver(post_save, sender=User)
     def save_user_profile(sender, instance, **kwargs):
         instance.profile.save()
+        
+class Post(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='posts')
+    sitename = models.CharField(max_length=50)
+    desc = HTMLField()
+    post_date = models.DateTimeField(default=timezone.now)
+    image1 = CloudinaryField('projects/')
+    link = models.CharField(max_length=70)
+
+
+    def __str__(self):
+        return self.sitename
+
+    def save_project(self):
+        self.save()
+
+    def delete_project(self):
+        self.delete()
+
+    @classmethod
+    def search_by_name(cls, search_term):
+        got_projects = Project.objects.filter(name__icontains=search_term)
+        return got_projects        
 
