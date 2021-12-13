@@ -1,21 +1,22 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .models import Post, Rating
+from .forms import ProfileForm, NewPostForm, ProjectRatingForm
 from django.contrib.auth.models import User
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
-from .forms import ProfileForm, NewPostForm, ProjectRatingForm
+
 
 # Create your views here.
-
 def index(request):
     return render(request, 'index.html', locals())
+
 
 @login_required(login_url='/accounts/login/')
 def profile(request):
     posts = Post.objects.all().order_by('-post_date')
     return render(request, 'profile.html', locals())
+
 
 @login_required(login_url='/accounts/login/')
 def edit(request):
@@ -32,6 +33,13 @@ def edit(request):
     else:
         new_profile = ProfileForm(instance=request.user.profile)
     return render(request, 'edit_profile.html', locals())
+
+
+@login_required(login_url='/accounts/login/')
+def project(request):
+    posts = Post.objects.all().order_by('-post_date')
+    return render(request, 'projects.html', locals())
+
 
 @login_required(login_url='/accounts/login/')
 def new_post(request):
