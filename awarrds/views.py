@@ -5,6 +5,7 @@ from .models import Post, Rating
 from django.contrib.auth.models import User
 from django.db.models import Avg
 from django.contrib.auth.decorators import login_required
+from .forms import ProfileForm, NewPostForm, ProjectRatingForm
 
 # Create your views here.
 
@@ -16,3 +17,18 @@ def profile(request):
     posts = Post.objects.all().order_by('-post_date')
     return render(request, 'profile.html', locals())
 
+@login_required(login_url='/accounts/login/')
+def edit(request):
+    if request.method == 'POST':
+        print(request.FILES)
+        new_profile = ProfileForm(
+            request.POST,
+            request.FILES,
+            instance=request.user.profile
+        )
+        if new_profile.is_valid():
+            new_profile.save()
+            return redirect('profile')
+    else:
+        new_profile = ProfileForm(instance=request.user.profile)
+    return render(request, 'edit_profile.html', locals())
