@@ -11,3 +11,8 @@ from django.contrib.auth.decorators import login_required
 def index(request):
     return render(request, 'index.html', locals())
 
+@login_required(login_url='/accounts/login/')
+def profile(request):
+    posts = Post.objects.all().order_by('-post_date')
+    return render(request, 'profile.html', locals())
+
