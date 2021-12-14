@@ -45,7 +45,7 @@ class Post(models.Model):
     @classmethod
     def search_by_name(cls, search_term):
         got_projects = Project.objects.filter(name__icontains=search_term)
-        return got_projects        
+        return got_projects       
 
 class Rating(models.Model):
     RATINGS = (
