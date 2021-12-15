@@ -10,7 +10,7 @@ from cloudinary.models import CloudinaryField
 # Create your models here.
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    image = CloudinaryField('image')
+    image = models.ImageField(upload_to='images/',default='v1638348565/owuk4syvculcljuzdron.jpg')
     bio = models.TextField(default="your bio here!")
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -29,7 +29,7 @@ class Post(models.Model):
     sitename = models.CharField(max_length=50)
     desc = HTMLField()
     post_date = models.DateTimeField(default=timezone.now)
-    image1 = CloudinaryField('projects/')
+    image1 = models.ImageField(upload_to='projects/')
     link = models.CharField(max_length=70)
 
 
