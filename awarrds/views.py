@@ -9,7 +9,9 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html', locals())
+    posts = Post.objects.all()
+    return render(request, 'index.html',{'posts':posts})
+     
 
 
 @login_required(login_url='/accounts/login/')
@@ -35,10 +37,10 @@ def edit(request):
     return render(request, 'edit_profile.html', locals())
 
 
-@login_required(login_url='/accounts/login/')
-def project(request):
-    posts = Post.objects.all().order_by('-post_date')
-    return render(request, 'projects.html', locals())
+# @login_required(login_url='/accounts/login/')
+# def project(request):
+#     posts = Post.objects.all().order_by('-post_date')
+#     return render(request, 'projects.html', locals())
 
 
 @login_required(login_url='/accounts/login/')
@@ -50,7 +52,7 @@ def new_post(request):
             post = form.save(commit=False)
             post.user = current_user
             post.save()
-        return redirect('project')
+        return redirect('index')
     else:
         form = NewPostForm()
     return render(request, 'new_post.html', {"form": form})
